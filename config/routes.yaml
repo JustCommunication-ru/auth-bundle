@@ -1,0 +1,5 @@
+auth_routes:
+    resource:
+        path: ../src/Controller/
+        namespace: JustCommunication\AuthBundle\Controller
+    type: attribute
