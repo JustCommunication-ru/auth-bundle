@@ -493,13 +493,13 @@
                 let pass = $('#reg_password_field').val();
                 let pass2 = $('#reg_password2_field').val();
 
-                if (pass.length<8){
-                    onGetRegCodeError("Пароль должен быть не менее 8 символов");
+                if (pass.length<security_pass_len_min){
+                    onGetRegCodeError("Пароль должен быть не менее "+security_pass_len_min+" символов");
                 }else
-                if (pass.length>32){
-                    onGetRegCodeError("Для пароля достаточно 32 символов");
+                if (pass.length>security_pass_len_max){
+                    onGetRegCodeError("Для пароля достаточно "+security_pass_len_max+" символов");
                 }else
-                if (!isValidPass(pass, 8, 32)){
+                if (!isValidPass(pass, security_pass_len_min, security_pass_len_max)){
                     onGetRegCodeError("Пароль содержит недопустимые символы (используйте буквы, цифры и спецсимволы !@%#*$%^&*()+=?,.", 10000);
                 }else
                 if(pass!=pass2){

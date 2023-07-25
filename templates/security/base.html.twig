@@ -61,6 +61,8 @@
             alert($val);
         }
         var global_redirect_to = "{% if redirect_to is defined %}{{ redirect_to }}{% endif %}";
+        var security_pass_len_min = parseInt("{% if security_pass_len_min is defined %}{{ security_pass_len_min }}{% else %}8{% endif %}");
+        var security_pass_len_max = parseInt("{% if security_pass_len_max is defined %}{{ security_pass_len_max }}{% else %}32{% endif %}");
 
 
         function isValidPhone(str){

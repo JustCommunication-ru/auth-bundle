@@ -66,6 +66,8 @@ class SecurityController extends AbstractController
                 'app_year'=>date('Y'),
                 'security_auth_code_delay'=>$_ENV['SECURITY_AUTH_CODE_DELAY'],
                 'security_reg_code_delay'=>$_ENV['SECURITY_REG_CODE_DELAY'],
+                'security_pass_len_min'=>$_ENV['SECURITY_PASS_LEN_MIN'],
+                'security_pass_len_max'=>$_ENV['SECURITY_PASS_LEN_MAX'],
 
             ]
         );
@@ -288,7 +290,9 @@ class SecurityController extends AbstractController
 
             if ($phone && FuncHelper::isPhone($phone)) {
 
-                $is_valid_pass = $pass && FuncHelper::isPass($pass, 8, 32);
+
+
+                $is_valid_pass = $pass && FuncHelper::isPass($pass, $_ENV['SECURITY_PASS_LEN_MIN'], $_ENV['SECURITY_PASS_LEN_MAX']);
                 if ($is_valid_pass) {
                     $user_by_phone = $userRepository->findByPhone($phone);
                     if (!$user_by_phone) {
