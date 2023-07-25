@@ -1,0 +1,530 @@
+{% extends '@Auth/security/base.html.twig' %}
+{% block body %}
+
+
+    {% if app.user %}
+
+        <!--img class="mb-4" src="/docs/4.6/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"-->
+        <h1 class="h3 mb-3 font-weight-normal">Вы уже авторизованы</h1>
+
+        <div class="mb-3">
+            <a href="/">На главную</a>
+        </div>
+
+        <div class="mb-3">
+            <a href="{{ path('app_logout') }}">Выход</a>
+        </div>
+
+
+    {% else %}
+        <!--img class="mb-4" src="/docs/4.6/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"-->
+
+        <h1 class="h3 mb-3 font-weight-normal text-center">Вход в личный кабинет</h1>
+
+        <ul class="mb-3 nav nav-tabs justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link js-tab-pass" aria-current="page" href="#">По паролю</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link js-tab-sms active" href="#">По смс коду</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link js-tab-reg" href="#">Регистрация</a>
+            </li>
+        </ul>
+
+
+        <div class="mb-3">
+            <label for="phone_number_field" class="form-label">Телефон</label>
+            <input type="tel" name="phone_number_field" id="phone_number_field" class="form-control tel-number" value="{{ last_username }}" placeholder="Телефонный номер" required autofocus>
+        </div>
+
+
+        <!-- ВХОД ПО ПОРОЛЮ ! ВХОД ПО ПОРОЛЮ ! ВХОД ПО ПОРОЛЮ ! ВХОД ПО ПОРОЛЮ ! ВХОД ПО ПОРОЛЮ ! ВХОД ПО ПОРОЛЮ     -->
+
+        <div class="js-div-pass d-none">
+            <div class="mb-3">
+                <label for="password_field" class="form-label">Пароль</label>
+                <input type="password" name="password_field" id="password_field" class="form-control" placeholder="Password" required>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            </div>
+            <!--div class="checkbox mb-3">
+                <label><input type="checkbox" value="remember-me"> Запомнить меня</label>
+            </div-->
+            {% if error %}
+            <div class="mb-3">
+                <div class="alert alert-danger">{{ error }}</div>
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <button class="w-100 btn btn-primary btn-block js_enter_by_pass" type="button">Войти с паролем</button>
+            </div>
+
+            <div class="alert js_enter_by_pass_alert d-none" role="alert"></div>
+        </div>
+
+
+
+
+
+        <!-- ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС         -->
+        <div class="js-div-sms">
+            <div class="mb-3">
+                <button class="w-100 btn btn-primary btn-block js_auth_get_code_apply" type="button">Получить</button>
+            </div>
+
+            <div class="alert js_auth_get_code_alert d-none" role="alert"></div>
+
+            <div class="js-div-sms2 d-none">
+                <div class="mb-3">
+                    <label for="auth_code_field" class="form-label">Код из СМС</label>
+                    <input type="tel" name="auth_code_field" id="auth_code_field" class="form-control" value="" placeholder="Код из sms/telegram" autocomplete="off">
+                </div>
+
+                <div class="mb-3 d-none">
+                    <label class="form-label js_auth_get_code_resend"><span style="display: none;">Код можно отправить повторно через 30 с. Это текст для примера </span> Тут же будет создаваться ссылка для повторного запроса <a href="#" style="display: none;">Получить код снова</a></label>
+                </div>
+
+                <div class="mb-3">
+                    <button class="w-100 btn btn-primary btn-block js_enter_by_code" type="button">Войти по коду</button>
+                </div>
+
+                <div class="alert js_enter_by_code_alert d-none" role="alert"></div>
+            </div>
+        </div>
+
+
+        <!-- РЕГИСТРАЦИЯ ! РЕГИСТРАЦИЯ ! РЕГИСТРАЦИЯ ! РЕГИСТРАЦИЯ ! РЕГИСТРАЦИЯ ! РЕГИСТРАЦИЯ ! РЕГИСТРАЦИЯ !       -->
+        <div class="js-div-reg d-none">
+            <div class="mb-3">
+                <label for="reg_name_field" class="form-label">Имя</label>
+                <input type="text" name="reg_name_field" id="reg_name_field" class="form-control" value="" placeholder="Имя" autocomplete="off">
+            </div>
+
+            <div class="mb-3">
+                <label for="reg_email_field" class="form-label">Email</label>
+                <input type="email" name="reg_email_field" id="reg_email_field" class="form-control" value="" placeholder="Email">
+            </div>
+
+            <div class="mb-3">
+                <button class="w-100 btn btn-primary btn-block js_reg_get_code_apply" type="button">Зарегистрироваться</button>
+            </div>
+
+            <div class="alert js_reg_get_code_alert d-none" role="alert"></div>
+
+            <div class="js-div-reg2 d-none">
+                <div class="mb-3">
+                    <label for="reg_code_field" class="form-label">Код из СМС</label>
+                    <input type="tel" name="reg_code_field" id="reg_code_field" class="form-control" value="" placeholder="Код из sms/telegram" autocomplete="off">
+                </div>
+
+                <div class="mb-3 d-none">
+                    <label class="form-label js_reg_get_code_resend"><span style="display: none;">Код можно отправить повторно через 30 с. Это текст для примера </span> Тут же будет создаваться ссылка для повторного запроса <a href="#" style="display: none;">Получить код снова</a></label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="reg_password_field" class="form-label">Придумайте пароль</label>
+                    <input type="password" name="reg_password_field" id="reg_password_field" class="form-control" placeholder="Пароль, не менее 8 символов">
+                </div>
+
+                <div class="mb-3 d-none">
+                    <label for="reg_password2_field" class="form-label">Подтвердите пароль</label>
+                    <input type="password" name="reg_password2_field" id="reg_password2_field" class="form-control" placeholder="Такой же пароль как в строке выше">
+                </div>
+
+                <div class="mb-3">
+                    <button class="w-100 btn btn-primary btn-block js_reg_by_code" type="button">Подтвердить</button>
+                </div>
+
+                <div class="alert js_reg_by_code_alert d-none" role="alert"></div>
+            </div>
+        </div>
+
+
+
+
+
+
+    {% endif %}
+
+    <script type="text/javascript">
+
+        let regUser = {'phone':'', 'email':'', 'name':''};
+
+        var hidealert = function(selector, timer_ms){
+            timer_ms = timer_ms || 5000;
+            setTimeout(function(){
+                $(selector).addClass('d-none');
+            }, timer_ms);
+        }
+
+        // selector расчистан на название класса, который лежит в скрываемом холдере
+        var updateCountDown = function(selector, timer_sec){
+            $(selector).parent().removeClass('d-none');
+            let intervalId = setInterval(function(){
+                //$(selector).html('<span style="display: none;">Код можно отправить повторно через 30 с.</span> <a href="#" style="display: none;">Получить код снова</a>');
+                if (timer_sec>0) {
+                    $(selector).html('Код можно отправить повторно через ' + (timer_sec) + ' с.');
+                    timer_sec--;
+                }else{
+                    clearInterval(intervalId);
+                    $(selector).html('<a href="#" class="'+selector.replace('.','')+'_link">Получить код снова</a>');
+                }
+            }, 1000);
+
+        }
+
+        var onGetAuthCodeSuccess = function(mess){
+            $('.js-div-sms2').removeClass('d-none');
+            $('#phone_number_field').prop('disabled', true);
+            $('.js_auth_get_code_apply').hide();
+
+            $('.js_auth_get_code_alert').removeClass('alert-danger').removeClass('alert-secondary').addClass('alert-success').removeClass('d-none').text(mess);
+            hidealert('.js_auth_get_code_alert');
+            $('#auth_code_field').focus();
+        }
+
+        var onGetAuthCodeError = function(mess){
+            $('.js-div-sms2').addClass('d-none');
+            $('.js_auth_get_code_alert').removeClass('alert-success').removeClass('alert-secondary').addClass('alert-danger').removeClass('d-none').text(mess);
+            hidealert('.js_auth_get_code_alert', 5000);
+        }
+
+
+        var onCodeLoginSucces = function(){
+            $('.js_enter_by_code_alert').removeClass('alert-danger').removeClass('alert-secondary').addClass('alert-success').removeClass('d-none').text('Код подтвержден, вход...');
+            //hidealert('.js_enter_by_code_alert', 5000);
+            $('#auth_code_field').prop('disabled', true);
+            setTimeout(function(){
+                location.href=global_redirect_to;
+            }, 500)
+        }
+        var onCodeLoginError = function(mess){
+            $('.js_enter_by_code_alert').removeClass('alert-success').removeClass('alert-secondary').addClass('alert-danger').removeClass('d-none').text(mess);
+            hidealert('.js_enter_by_code_alert', 5000);
+        }
+
+        var onPassLoginSucces = function(){
+            $('.js_enter_by_pass_alert').removeClass('alert-danger').removeClass('alert-secondary').addClass('alert-success').removeClass('d-none').text('Вход подтвержден, перенаправление ...');
+            setTimeout(function(){
+                location.href=global_redirect_to;
+            }, 500)
+        }
+        var onPassLoginError = function(mess){
+            $('.js_enter_by_pass_alert').removeClass('alert-success').removeClass('alert-secondary').addClass('alert-danger').removeClass('d-none').text(mess);
+            hidealert('.js_enter_by_code_alert', 5000);
+        }
+
+        var onGetRegCodeError = function(mess){
+            $('.js_reg_get_code_alert').removeClass('alert-success').removeClass('alert-secondary').addClass('alert-danger').removeClass('d-none').text(mess);
+            hidealert('.js_reg_get_code_alert', 5000);
+        }
+
+        var onGetRegCodeSuccess = function(mess){
+            $('.js-div-reg2').removeClass('d-none');
+            $('#phone_number_field, #reg_email_field, #reg_name_field').prop('disabled', true);
+            $('.js_reg_get_code_apply').hide();
+
+            $('.js_reg_get_code_alert').removeClass('alert-danger').removeClass('alert-secondary').addClass('alert-success').removeClass('d-none').text(mess);
+            hidealert('.js_reg_get_code_alert');
+            $('#reg_code_field').focus();
+        }
+
+
+        var onCodeRegSucces = function(){
+            $('.js_reg_by_code_alert').removeClass('alert-danger').removeClass('alert-secondary').addClass('alert-success').removeClass('d-none').text('Код подтвержден, вход...');
+            //hidealert('.js_enter_by_code_alert', 5000);
+            $('#reg_code_field').prop('disabled', true);
+            setTimeout(function(){
+                location.href=global_redirect_to;
+            }, 500)
+        }
+        var onCodeRegError = function(mess){
+            $('.js_reg_by_code_alert').removeClass('alert-success').removeClass('alert-secondary').addClass('alert-danger').removeClass('d-none').text(mess);
+            hidealert('.js_reg_by_code_alert', 5000);
+        }
+
+
+        $(document).ready(function(){
+            $('.js-tab-pass').on('click', function(){
+                $('.js-div-pass').removeClass('d-none');
+                $('.js-div-sms, .js-div-reg').addClass('d-none');
+                //$('.js-div-sms2').addClass('d-none');
+
+                // фокусим нужное поле
+                let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
+                if (isValidPhone(phone)) {
+                    $('#password_field').focus();
+                }else{
+                    $('#phone_number_field').focus();
+                }
+                !$('.js-tab-pass').hasClass('active') && $('.js-tab-pass').toggleClass('active') && $('.js-tab-sms, .js-tab-reg').removeClass('active');
+                return false;
+            });
+
+            $('.js-tab-sms').on('click', function(){
+                $('.js-div-pass, .js-div-reg').addClass('d-none');
+                $('.js-div-sms').removeClass('d-none');
+                // фокусим нужное поле
+                if ($('.js-div-sms2').hasClass('d-none')){
+                    $('#phone_number_field').focus();
+                }else{
+                    $('#auth_code_field').focus();
+                }
+                !$('.js-tab-sms').hasClass('active') && $('.js-tab-sms').toggleClass('active') && $('.js-tab-pass, .js-tab-reg').removeClass('active');
+                return false;
+            });
+
+            $('.js-tab-reg').on('click', function(){
+                $('.js-div-pass, .js-div-sms').addClass('d-none');
+                $('.js-div-reg').removeClass('d-none');
+
+                // фокусим нужное поле
+                if ($('.js-div-reg2').hasClass('d-none')){
+                    $('#phone_number_field').prop('disabled', false).focus();
+                }else{
+                    $('#reg_code_field').focus();
+                }
+                !$('.js-tab-reg').hasClass('active') && $('.js-tab-reg').toggleClass('active') && $('.js-tab-pass, .js-tab-sms').removeClass('active');
+                return false;
+            });
+
+
+
+
+
+            // по энтеру на телефоне получаем код или авторизуемся
+            $('#phone_number_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    if (!$('.js-div-sms').hasClass('d-none')){
+                        $('.js_auth_get_code_apply').click();
+                    }else
+                    if (!$('.js-div-pass').hasClass('d-none')){
+                        $('#password_field').focus();
+                    }else
+                    if (!$('.js-div-reg').hasClass('d-none')){
+                        $('#reg_name_field').focus();
+                    }
+                }
+            });
+
+            // по энтеру логинимся
+            $('#auth_code_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('.js_enter_by_code').click();
+                }
+            });
+
+            // по энтеру логинимся с паролем
+            $('#password_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('.js_enter_by_pass').click();
+                }
+            });
+
+
+
+            $('#reg_name_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('#reg_email_field').focus();
+                }
+            });
+
+            $('#reg_email_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('.js_reg_get_code_apply').click();
+                }
+            });
+
+            $('#reg_password_field').on('keypress', function(e){
+                //if ($('#reg_password2_field').hasClass('d-none'));
+                $('#reg_password2_field').parent().removeClass('d-none')
+            });
+
+
+            //
+            $('#reg_code_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('#reg_password_field').focus();
+                }
+            });
+            //
+            $('#reg_password_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('#reg_password2_field').focus();
+                }
+            });
+            //
+            $('#reg_password2_field').on('keypress', function(e){
+                if(e.which == 13) {
+                    $('.js_reg_by_code').click();
+                }
+            });
+
+
+
+            // Авторизация по коду. 1. Получение кода для входа
+
+            $('.form-signin').on('click', '.js_auth_get_code_resend_link', function(){
+                $('.js_auth_get_code_apply').click();
+                return false;
+
+            });
+
+
+
+            $('.js_auth_get_code_apply').on('click', function(){
+                let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
+                if (isValidPhone(phone)) { // валидация номера
+
+                    $('.js_auth_get_code_alert').removeClass('alert-danger').removeClass('alert-success').addClass('alert-secondary').removeClass('d-none').text('Отправка сообщения...');
+
+                    sendajax(-1, "auth_get_code", {'login': phone}, function (reply, popup) {
+                        //alert(reply.mess);
+                        onGetAuthCodeSuccess(reply.mess);
+                        updateCountDown('.js_auth_get_code_resend', reply.data.sec??100);
+                    }, function (reply, popup) {
+                        if (reply.code == "230601E003"){
+                            // уже авторизованы, молча перенаправляемся
+                            location.href=global_redirect_to;
+                        }else {
+                            onGetAuthCodeError(reply.mess)
+                        }
+                    }, function () {
+
+                    })
+                }else{
+                    onGetAuthCodeError("Введите корректный номер телефона");
+                }
+                return false;
+            });
+
+            // Авторизация по коду. 2. Вход по коду
+            $('.js_enter_by_code').on('click', function(){
+
+                let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
+                let code = $('#auth_code_field').val();
+
+                if (code.length<3) {
+                    onCodeLoginError('Введите код который был отправлен вам на телефон')
+                }else {
+                    sendajax(-1, "login", {'login': phone, 'password': "", 'code': code}, function (reply, popup) {
+                        onCodeLoginSucces();
+                    }, function (reply, popup) {
+                        onCodeLoginError(reply.mess)
+                    }, function () {
+
+                    });
+                }
+                return false;
+            });
+
+
+
+            // Авторизация по паролю. 1. вход по паролю
+            $('.js_enter_by_pass').on('click', function(){
+
+                let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
+                if (isValidPhone(phone)) {
+                    sendajax(-1, "login", {'login': phone,'password': $('#password_field').val()}, function (reply, popup) {
+                        onPassLoginSucces();
+
+                    }, function (reply, popup) {
+                        onPassLoginError(reply.mess)
+
+                    }, function () {
+
+                    });
+                }
+                return false;
+            });
+
+
+
+
+            $('.form-signin').on('click', '.js_reg_get_code_resend_link', function(){
+                $('.js_reg_get_code_apply').click();
+                return false;
+
+            });
+
+
+            /**
+             * После получения кода поля воода блокируются, но надо бы где-то сохранить данные с которыми асациируется этот код,
+             * чтобы не обращаться повторно к форме, там может быть уже дичь. На серваке всё перепроверится, но тут тоже должно быть красиво
+             */
+            $('.js_reg_get_code_apply').on('click', function(){
+                let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
+                let email = $('#reg_email_field').val();
+                let name = $('#reg_name_field').val();
+                if (!isValidPhone(phone)) {
+                    onGetRegCodeError("Введите корректный номер телефона");
+                }else
+                if(!isValidEmail(email)) {
+                    onGetRegCodeError("Укажите email");
+                }else
+                if(name.trim().length<3) {
+                    onGetRegCodeError("Укажите ваше имя");
+                }else{
+                    $('.js_reg_get_code_alert').removeClass('alert-danger').removeClass('alert-success').addClass('alert-secondary').removeClass('d-none').text('Отправка сообщения...');
+
+                    let data = {'phone':phone, 'email':email, 'name':name};
+                    sendajax(-1, "reg_get_code", data, function (reply, popup) {
+                        //alert(reply.mess);
+                        onGetRegCodeSuccess(reply.mess);
+                        regUser = data;
+                        updateCountDown('.js_reg_get_code_resend', reply.data.sec??100);
+                    }, function (reply, popup) {
+                        onGetRegCodeError(reply.mess);
+                    }, function () {
+
+                    })
+                }
+                return false;
+            });
+
+
+            // Регистрация по коду. 2. Вход по коду
+            $('.js_reg_by_code').on('click', function(){
+
+                let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
+                let code = $('#reg_code_field').val().replace(/[^\d]+/g, '');
+                let pass = $('#reg_password_field').val();
+                let pass2 = $('#reg_password2_field').val();
+
+                if (pass.length<8){
+                    onGetRegCodeError("Пароль должен быть не менее 8 символов");
+                }else
+                if (pass.length>32){
+                    onGetRegCodeError("Для пароля достаточно 32 символов");
+                }else
+                if (!isValidPass(pass, 8, 32)){
+                    onGetRegCodeError("Пароль содержит недопустимые символы (используйте буквы, цифры и спецсимволы !@%#*$%^&*()+=?,.", 10000);
+                }else
+                if(pass!=pass2){
+                    onGetRegCodeError("Введенные пароли не совпадают");
+                }else
+                if (phone!=regUser.phone) {
+                    onGetRegCodeError("В форму были внесены изменения, перезагрузите страницу");
+                }else {
+                    sendajax(-1, "reg", {'phone': phone, 'code': code, 'pass': pass}, function (reply, popup) {
+                        onCodeRegSucces();
+                    }, function (reply, popup) {
+                        onCodeRegError(reply.mess)
+                    }, function () {
+
+                    })
+                }
+                return false;
+            });
+
+        });
+
+        //let app = require('./scripts.lib.func');
+        //alert(app.rand(1111,9999));
+        //alert(rand(1111,9999));
+        //alert(jQuery('#inputPhone').val()+"!!!!!!");
+        //alert($('#inputPhone').val());
+    </script>
+{% endblock %}

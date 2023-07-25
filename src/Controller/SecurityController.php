@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
             $redirect_to_path = '/';
         }
 
-        return $this->render('security/login.html.twig', [
+        return $this->render('@Auth/security/login.html.twig', [
                 'last_username' => $lastUsername,
                 'error' => $error?$error->getMessage():'',
                 'redirect_to'=>$redirect_to_path,
@@ -84,7 +84,7 @@ class SecurityController extends AbstractController
             $redirect_to_path = '/';
         }
 
-        return $this->render('security/deny.html.twig', ['redirect_to'=>$redirect_to_path]);
+        return $this->render('@Auth/security/deny.html.twig', ['redirect_to'=>$redirect_to_path]);
     }
 
 
@@ -97,7 +97,7 @@ class SecurityController extends AbstractController
     #[Route('/user/reg', name: 'app_reg', priority: "100")]
     public function registration(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('security/reg.html.twig', ['error' => '']);
+        return $this->render('@Auth/security/reg.html.twig', ['error' => '']);
     }
 
     /**

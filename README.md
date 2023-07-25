@@ -7,12 +7,33 @@
 ## Установка 
 `composer require justcommunication/auth-bundle`
 
+На данный момент необходимо дописать в хост-composer.json:
+
+```
+"repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:mihaylo47/auth-bundle.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:mihaylo47/func-bundle.git"
+        }
+    ],
+```
+
 ## Требования
 Для полноценной работы потребуется настроить конфигурацию хост проекта и подписчика на события для отправки сообщений.
 
 ## Подключение
 
 В `.env` (`.env.local`) добавить константы:
+```
+APP_NAME="MY_PROJECT"
+APP_URL="https://myproject.loc"
+AJAX_DEBUG=0
+```
+
 ```
 SECURITY_LOGIN_ROUTE_REDIRECT=app_index # название роута на который произойдер редирект после успешной авторизации
 
@@ -25,16 +46,20 @@ SECURITY_REG_CODE_DELAY=60 # раз в столько секунд можно з
 SECURITY_REG_CODE_LEN=6    # количество знаков (цифр) в коде для регистрации, ипользуется в UserRegCodeRepository
 ```
 
-Создать файл конфигурации роутов config/routes/auth.yaml для проброски роутов из пакета в проект
+Здесь стоит обратить внимание на роут `app_index` - его следует заменить на свой существующий роут
+
+Создать файл конфигурации роутов для проброски роутов из пакета в проект
 ```
+# config/routes/auth.yaml 
 auth_bundle:
   resource: '@AuthBundle/config/routes.yaml'
   prefix:  # нельзя добавлять префикс, либо придется его учитывать в securyty.firewall путях,
   name_prefix:  # нельзя добавлять префикс роутам
 ```
-В config/packages/security.yaml поменять параметры авторизации, фаервол и 
+В security.yaml поменять параметры авторизации: провайдер (app_user_provider), фаервол (firewalls/main) и настроить ограничения доступа к контенту(access_control)
 
 ```
+# config/packages/security.yaml
 security:    
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'    
@@ -49,7 +74,7 @@ security:
             provider: app_user_provider
             # аутентификатор из пакета 
             custom_authenticator: JustCommunication\AuthBundle\Security\Authenticator
-            # для автоматичекого редиректа на страницу авторизации гостя при доступе к защищенным ресурсам
+            # для автоматичекого редиректа на страницу авторизации гостя при попытке доступа к защищенным ресурсам
             form_login:
                 login_path: app_login
             # для работы стандартной процедуры логаута
@@ -65,14 +90,14 @@ security:
         - { path: ^/, roles: ROLE_USER }
 ```
 
-
+а еще в /public своего проекта необходимо скопировать содержимое public_content (js и css папки) бандла
 
 ### Подключение уведомлений
 Создать в проекте подписчика на события на основе приведенного ниже кода.
-App\EventSubscriber\UserNotifySubscriber.php
 
 Смысл его работы в том, чтобы ловить UserNotifyEvent и отправлять сообщение пользователю посредством месенджеров на указанные контакты. Здесь реализован пример отправки кода авторизации/регистрации в телеграм, либо через сервис смс.
 ```
+# App\EventSubscriber\UserNotifySubscriber.php
 <?php
 namespace App\EventSubscriber;
 
@@ -179,7 +204,7 @@ class UserNotifySubscriber implements EventSubscriberInterface
 }
 ```
 
-Для работы вышеприведенного кода понадобится добавить в `.env` (`.env.local`) константы:
+Для работы вышеприведенного кода понадобится установить [SmsAeroBundle](https://github.com/mihaylo47/smsaero-bundle), [TelegramBundle](https://github.com/mihaylo47/telegram-bundle), а так же добавить в `.env` (`.env.local`) константы:
 ```
 USER_NOTIFY="telegram" # smsaero/telegram пока не используется
 USER_NOTIFY_ADMIN_COPY=1 # 1-отправлять в телегу копию, 0-нет
