@@ -5,7 +5,6 @@ namespace JustCommunication\AuthBundle\Repository;
 use JustCommunication\AuthBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use JustCommunication\FuncBundle\Service\FuncHelper;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -98,6 +97,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->persist($user);
         $this->_em->flush();
         return $user;
+    }
+
+
+    /**
+     * Выборка списка записей по id
+     * @param array $ids
+     * @return float|int|mixed|string
+     */
+    public function findByIds(array $ids){
+        $arr = $this->_em->createQuery(
+            'SELECT u FROM '.$this->getClassName().' u 
+                WHERE u.id in (:ids)
+            ')
+            ->setParameter('ids', $ids)
+            ->getResult();
+
+        return FuncHelper::indexBy($arr, fn($item)=>$item->getId());
     }
 
 

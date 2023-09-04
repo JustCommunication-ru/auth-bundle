@@ -57,7 +57,10 @@ class Authenticator extends AbstractAuthenticator
                     $this->userAuthCodeRepository->useCode($validCode);
                     // аутентифицируем, нужно вернуть объект Passport
                     //$passport = new Passport(new UserBadge($login), new PasswordCredentials($plaintextPassword));
-                    $passport = new SelfValidatingPassport(new UserBadge($login));
+                    //$passport = new SelfValidatingPassport(new UserBadge($login, function() use ($user, $request){
+                    $passport = new SelfValidatingPassport(new UserBadge($login, function() use ($user){
+                        return $user;
+                    }));
 
                     return $passport;
                 }else{
@@ -68,9 +71,10 @@ class Authenticator extends AbstractAuthenticator
             }elseif ($login!='' && $pass!=''){
                 // вход по паролю
 
-
                 if ($this->passwordHasher->isPasswordValid($user, $pass)){
-                    $passport = new SelfValidatingPassport(new UserBadge($login));
+                    $passport = new SelfValidatingPassport(new UserBadge($login, function() use ($user){
+                        return $user;
+                    }));
 
                     return $passport;
                 }else{

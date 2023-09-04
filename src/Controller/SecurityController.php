@@ -52,9 +52,21 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        try {
-            $redirect_to_path = $this->generateUrl($redirect_to_name);
-        } catch (RouteNotFoundException $e){
+
+        // Честно пытаемся установить перенабравление: 1) куда просили в ссылке 2) куда установлен дефолт 3) на главную
+        if ($redirect_to_name!='') {
+            try {
+                $redirect_to_path = $this->generateUrl($redirect_to_name);
+            } catch (RouteNotFoundException $e) {
+                $redirect_to_path = '/';
+            }
+        }elseif($_ENV['SECURITY_LOGIN_DEFAULT_REDIRECT_ROUTE']) {
+            try {
+                $redirect_to_path = $this->generateUrl($_ENV['SECURITY_LOGIN_DEFAULT_REDIRECT_ROUTE']);
+            } catch (RouteNotFoundException $e) {
+                $redirect_to_path = '/';
+            }
+        }else{
             $redirect_to_path = '/';
         }
 
@@ -111,6 +123,16 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
         //return $this->redirectToRoute('app_login');
+    }
+
+    /**
+     * Дублирующий роут
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    #[Route('/user/logout', name: 'app_user_logout', priority: "100")]
+    public function app_user_logout()
+    {
+        return $this->redirectToRoute('app_logout');
     }
 
     /**

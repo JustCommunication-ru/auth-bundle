@@ -48,6 +48,8 @@ SECURITY_REG_CODE_LEN=6    # количество знаков (цифр) в к�
 SECURITY_PASS_LEN_MIN=8
 SECURITY_PASS_LEN_MAX=32
 
+SECURITY_LOGIN_DEFAULT_REDIRECT_ROUTE=app_index
+
 
 ```
 
