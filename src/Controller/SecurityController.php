@@ -111,7 +111,8 @@ class SecurityController extends AbstractController
     #[Route('/user/reg', name: 'app_reg', priority: "100")]
     public function registration(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('@Auth/security/reg.html.twig', ['error' => '']);
+        return $this->redirectToRoute('app_login');
+        //return $this->render('@Auth/security/reg.html.twig', ['error' => '']);
     }
 
     /**

@@ -8,11 +8,11 @@
         <h1 class="h3 mb-3 font-weight-normal">Вы уже авторизованы</h1>
 
         <div class="mb-3">
-            <a href="/">На главную</a>
+            <a class="auth-bundle-a" href="/">На главную</a>
         </div>
 
         <div class="mb-3">
-            <a href="{{ path('app_logout') }}">Выход</a>
+            <a class="auth-bundle-a" href="{{ path('app_logout') }}">Выход</a>
         </div>
 
 
@@ -23,13 +23,13 @@
 
         <ul class="mb-3 nav nav-tabs justify-content-center">
             <li class="nav-item">
-                <a class="nav-link js-tab-pass" aria-current="page" href="#">По паролю</a>
+                <a class="auth-bundle-a nav-link js-tab-pass" aria-current="page" href="#">По паролю</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link js-tab-sms active" href="#">По смс коду</a>
+                <a class="auth-bundle-a nav-link js-tab-sms active" href="#">По смс коду</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link js-tab-reg" href="#">Регистрация</a>
+                <a class="auth-bundle-a nav-link js-tab-reg" href="#">Регистрация</a>
             </li>
         </ul>
 
@@ -58,7 +58,7 @@
             {% endif %}
 
             <div class="mb-3">
-                <button class="w-100 btn btn-primary btn-block js_enter_by_pass" type="button">Войти с паролем</button>
+                <button class="auth-bundle-btn w-100 btn btn-primary btn-block js_enter_by_pass" type="button">Войти с паролем</button>
             </div>
 
             <div class="alert js_enter_by_pass_alert d-none" role="alert"></div>
@@ -71,7 +71,7 @@
         <!-- ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС ! ВХОД ПО СМС         -->
         <div class="js-div-sms">
             <div class="mb-3">
-                <button class="w-100 btn btn-primary btn-block js_auth_get_code_apply" type="button">Получить</button>
+                <button class="auth-bundle-btn w-100 btn btn-primary btn-block js_auth_get_code_apply" type="button">Получить</button>
             </div>
 
             <div class="alert js_auth_get_code_alert d-none" role="alert"></div>
@@ -83,11 +83,11 @@
                 </div>
 
                 <div class="mb-3 d-none">
-                    <label class="form-label js_auth_get_code_resend"><span style="display: none;">Код можно отправить повторно через 30 с. Это текст для примера </span> Тут же будет создаваться ссылка для повторного запроса <a href="#" style="display: none;">Получить код снова</a></label>
+                    <label class="form-label js_auth_get_code_resend"><span style="display: none;">Код можно отправить повторно через 30 с. Это текст для примера </span> Тут же будет создаваться ссылка для повторного запроса <a class="auth-bundle-a" href="#" style="display: none;">Получить код снова</a></label>
                 </div>
 
                 <div class="mb-3">
-                    <button class="w-100 btn btn-primary btn-block js_enter_by_code" type="button">Войти по коду</button>
+                    <button class="auth-bundle-btn w-100 btn btn-primary btn-block js_enter_by_code" type="button">Войти по коду</button>
                 </div>
 
                 <div class="alert js_enter_by_code_alert d-none" role="alert"></div>
@@ -108,7 +108,7 @@
             </div>
 
             <div class="mb-3">
-                <button class="w-100 btn btn-primary btn-block js_reg_get_code_apply" type="button">Зарегистрироваться</button>
+                <button class="auth-bundle-btn w-100 btn btn-primary btn-block js_reg_get_code_apply" type="button">Зарегистрироваться</button>
             </div>
 
             <div class="alert js_reg_get_code_alert d-none" role="alert"></div>
@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="mb-3 d-none">
-                    <label class="form-label js_reg_get_code_resend"><span style="display: none;">Код можно отправить повторно через 30 с. Это текст для примера </span> Тут же будет создаваться ссылка для повторного запроса <a href="#" style="display: none;">Получить код снова</a></label>
+                    <label class="form-label js_reg_get_code_resend"><span style="display: none;">Код можно отправить повторно через 30 с. Это текст для примера </span> Тут же будет создаваться ссылка для повторного запроса <a class="auth-bundle-a" href="#" style="display: none;">Получить код снова</a></label>
                 </div>
 
                 <div class="mb-3">
@@ -134,7 +134,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <button class="w-100 btn btn-primary btn-block js_reg_by_code" type="button">Подтвердить</button>
+                    <button class="auth-bundle-btn w-100 btn btn-primary btn-block js_reg_by_code" type="button">Подтвердить</button>
                 </div>
 
                 <div class="alert js_reg_by_code_alert d-none" role="alert"></div>
@@ -169,7 +169,7 @@
                     timer_sec--;
                 }else{
                     clearInterval(intervalId);
-                    $(selector).html('<a href="#" class="'+selector.replace('.','')+'_link">Получить код снова</a>');
+                    $(selector).html('<a class="auth-bundle-a" href="#" class="'+selector.replace('.','')+'_link">Получить код снова</a>');
                 }
             }, 1000);
 
