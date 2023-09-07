@@ -46,8 +46,12 @@ class SecurityController extends AbstractController
      * @return Response
      */
     #[Route('/user/login/{redirect_to_name}', name: 'app_login', priority: "100")]
-    public function login(AuthenticationUtils $authenticationUtils, $redirect_to_name=''): Response
+    public function login(AuthenticationUtils $authenticationUtils, Security $security, $redirect_to_name=''): Response
     {
+        // При посещении страницы в авторизованном режиме при необходимсти пинаем пользователя.
+        if ($security->getUser() && $_ENV['SECURITY_LOGIN_DEFAULT_REDIRECT_ROUTE']!='') {
+            return $this->redirectToRoute($_ENV['SECURITY_LOGIN_DEFAULT_REDIRECT_ROUTE']);
+        }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
