@@ -406,7 +406,7 @@
                 let phone = $('#phone_number_field').val().replace(/[^\d]+/g, '');
                 let code = $('#auth_code_field').val();
 
-                if (code.length<3) {
+                if (code.length<(security_auth_code_len+'').length) {
                     onCodeLoginError('Введите код который был отправлен вам на телефон')
                 }else {
                     sendajax(-1, "login", {'login': phone, 'password': "", 'code': code}, function (reply, popup) {
