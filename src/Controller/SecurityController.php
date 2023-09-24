@@ -155,7 +155,7 @@ class SecurityController extends AbstractController
             $user = $security->getUser();
             // Здесь должен быть такой же массив как PublicQueryResolver::principal()
             // записать в ответ параметры успешного завершения функции
-            $this->setAns(array('result'=>'success', 'code'=>'JCAB:20230629CS001', 'mess'=>'', 'data'=>(array)$user));
+            $this->setAns(array('result'=>'success', 'code'=>'JCAB:20230629CS001', 'message'=>'', 'data'=>(array)$user));
             // создать куку с новым csrf токеном
            //$cookie = $this->csrfCookie->refreshToken();
 
@@ -163,7 +163,7 @@ class SecurityController extends AbstractController
             // чтобы это заработало надо в authenticator в сессию передать название(!) эксепшена
             $error = $authenticationUtils->getLastAuthenticationError();
             $lastUsername = $authenticationUtils->getLastUsername();
-            $this->setAns(array('result'=>'error', 'code'=>'JCAB:20230629CS002', 'mess'=>$error?$error->getMessage():''));
+            $this->setAns(array('result'=>'error', 'code'=>'JCAB:20230629CS002', 'message'=>$error?$error->getMessage():''));
         }
         // сформировать json ответ и отдать его клиенту
         $jsonResponse = $this->jsonAns();
@@ -192,8 +192,8 @@ class SecurityController extends AbstractController
     public function ajax_auth_get_code(Security $security,Request $request, UserRepository $userRepository, UserAuthCodeRepository $userAuthCodeRepository, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         if ($security->getUser()) {
-            $this->debugAns(array('mess'=>$security->getUser()->getUsername()))
-                ->setAns(array('result'=>'error', 'code'=>'JCAB:20230629CS003', 'mess'=>'Вы уже авторизованы.'));
+            $this->debugAns(array('message'=>$security->getUser()->getUsername()))
+                ->setAns(array('result'=>'error', 'code'=>'JCAB:20230629CS003', 'message'=>'Вы уже авторизованы.'));
         }else{
             $login = $request->request->get('login');
 
@@ -213,16 +213,16 @@ class SecurityController extends AbstractController
                         $event = new UserNotifyEvent($user, $mess, $newCode);
                         $eventDispatcher->dispatch($event, UserNotifyEvent::class);
 
-                        $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230629CS004', 'mess' => "Код авторизации успешно отправлен", 'data'=>['sec'=>$newCode->getRemainTimeForRepeat()]));
+                        $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230629CS004', 'message' => "Код авторизации успешно отправлен", 'data'=>['sec'=>$newCode->getRemainTimeForRepeat()]));
                     }else{
                         //$userAuthCodeRepository->idleTry($existCode); а зачем? ну попросил, мы не дали
-                        $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230630CS013', 'mess' => "Код авторизации уже был отправлен ранее", 'data'=>['sec'=>$existCode->getRemainTimeForRepeat()]));
+                        $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230630CS013', 'message' => "Код авторизации уже был отправлен ранее", 'data'=>['sec'=>$existCode->getRemainTimeForRepeat()]));
                     }
                 } else {
-                    $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS005', 'mess' => "Пользователь не найден."));
+                    $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS005', 'message' => "Пользователь не найден."));
                 }
             }else{
-                $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS006', 'mess' => "Телефон указан не корректно"));
+                $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS006', 'message' => "Телефон указан не корректно"));
             }
         }
         return $this->jsonAns();
@@ -239,7 +239,7 @@ class SecurityController extends AbstractController
     public function ajax_reg_get_code(Security $security, Request $request, UserRepository $userRepository, UserRegCodeRepository $userRegCodeRepository, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         if ($security->getUser()) {
-            $this->debugAns(array('mess'=>$security->getUser()->getUsername()))->setAns(array('result'=>'error', 'code'=>'JCAB:20230629CS007', 'mess'=>'Вы уже авторизованы.'));
+            $this->debugAns(array('message'=>$security->getUser()->getUsername()))->setAns(array('result'=>'error', 'code'=>'JCAB:20230629CS007', 'message'=>'Вы уже авторизованы.'));
         }else{
             $phone = $request->request->get('phone');
             $email = $request->request->get('email');
@@ -277,21 +277,21 @@ class SecurityController extends AbstractController
                                 $event = new UserNotifyEvent($user, $mess, $newCode);
                                 $eventDispatcher->dispatch($event, UserNotifyEvent::class);
 
-                                $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230629CS012', 'mess' => "Код подтверждения успешно отправлен", 'data'=>['sec'=>$newCode->getRemainTimeForRepeat()]));
+                                $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230629CS012', 'message' => "Код подтверждения успешно отправлен", 'data'=>['sec'=>$newCode->getRemainTimeForRepeat()]));
                             }else{
-                                $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230630CS014', 'mess' => "Код подтверждения уже был отправлен ранее", 'data'=>['sec'=>$existCode->getRemainTimeForRepeat()]));
+                                $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230630CS014', 'message' => "Код подтверждения уже был отправлен ранее", 'data'=>['sec'=>$existCode->getRemainTimeForRepeat()]));
                             }
                         }else{
-                            $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS011', 'mess' => "Пользователь с таким email уже зарегистрирован"));
+                            $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS011', 'message' => "Пользователь с таким email уже зарегистрирован"));
                         }
                     }else{
-                        $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS010', 'mess' => "Email указан неверно"));
+                        $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS010', 'message' => "Email указан неверно"));
                     }
                 }else{
-                    $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS009', 'mess' => "Пользователь с таким номером телефона уже зарегистрирован"));
+                    $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS009', 'message' => "Пользователь с таким номером телефона уже зарегистрирован"));
                 }
             }else{
-                $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS008', 'mess' => "Телефон указан не корректно"));
+                $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230629CS008', 'message' => "Телефон указан не корректно"));
             }
 
         }
@@ -309,7 +309,7 @@ class SecurityController extends AbstractController
     public function ajax_reg(Security $security, Request $request, UserRepository $userRepository, UserRegCodeRepository $userRegCodeRepository, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         if ($security->getUser()) {
-            $this->debugAns(array('mess'=>$security->getUser()->getUsername()))->setAns(array('result'=>'error', 'code'=>'JCAB:20230630CS015', 'mess'=>'Вы уже авторизованы.'));
+            $this->debugAns(array('message'=>$security->getUser()->getUsername()))->setAns(array('result'=>'error', 'code'=>'JCAB:20230630CS015', 'message'=>'Вы уже авторизованы.'));
         }else{
             $phone = $request->request->get('phone');
             $code = $request->request->get('code');
@@ -344,21 +344,21 @@ class SecurityController extends AbstractController
                                 $security->login($user, Authenticator::class);
 
 
-                                $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230630CS016', 'mess' => "Код авторизации успешно отправлен"));
+                                $this->setAns(array('result' => 'success', 'code' => 'JCAB:20230630CS016', 'message' => "Код авторизации успешно отправлен"));
                             } else {
-                                $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS017', 'mess' => "Пользователь с таким email уже был зарегистрирован"));
+                                $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS017', 'message' => "Пользователь с таким email уже был зарегистрирован"));
                             }
                         } else {
-                            $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS018', 'mess' => "Неверный код регистрации"));
+                            $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS018', 'message' => "Неверный код регистрации"));
                         }
                     } else {
-                        $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS019', 'mess' => "Пользователь с таким номером телефона уже зарегистрирован"));
+                        $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS019', 'message' => "Пользователь с таким номером телефона уже зарегистрирован"));
                     }
                 }else{
-                    $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS020', 'mess' => "Пароль указан не корректно"));
+                    $this->setAns(array('result' => 'error', 'code' => 'JCAB:20230630CS020', 'message' => "Пароль указан не корректно"));
                 }
             }else{
-                $this->setAns(array('result' => 'error', 'code' => '20230630CS021', 'mess' => "Телефон указан не корректно"));
+                $this->setAns(array('result' => 'error', 'code' => '20230630CS021', 'message' => "Телефон указан не корректно"));
             }
 
         }

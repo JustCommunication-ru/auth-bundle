@@ -166,8 +166,8 @@ function sendajax(popup, method, params, onSuccess, onError, onAllways, onFail){
 					}
 					lihtml.checkForm(1);
 
-					if (reply.mess!=undefined){
-						_mess =reply.mess;
+					if (reply.message!=undefined){
+						_mess =reply.message;
 					}else{
 						_mess="Проверьте правильность заполнения полей"
 					}
@@ -216,11 +216,11 @@ function sendajax(popup, method, params, onSuccess, onError, onAllways, onFail){
 					}
 					var default_error_run = onError(reply, _target);
 					if (default_error_run){
-						_mess =reply.mess;
+						_mess =reply.message;
 					}else{
 						_mess='';
 					}
-				}else if (reply.mess){
+				}else if (reply.message){
 					_mess =reply.mess;
 				}else{
 					_mess="Извините, произошла непредвиденная ошибка, сообщите о ней разработчикам.";

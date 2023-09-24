@@ -30,7 +30,7 @@ trait AjaxProtocolTrait
             $this->ans = array(
                 'result' => 'error',
                 'code' => 'JCAB:000000X000',
-                'mess' => 'Answer not set',
+                'message' => 'Answer not set',
                 'trace_code' => array(),
                 'data' => array(),
                 'debug' => array()
@@ -100,10 +100,10 @@ trait AjaxProtocolTrait
 
         // Встраиваем отладку в обычный ответ
         if ($_ENV["AJAX_DEBUG"]=='1') {
-            $this->ans['mess'].=' '.'[CODE: '.implode(' => ',$this->ans['trace_code']).']';
+            $this->ans['message'].=' '.'[CODE: '.implode(' => ',$this->ans['trace_code']).']';
 
-            if (isset($this->ans['debug']['mess'])){
-                $this->ans['mess'].=' '.'[DEBUG: '.$this->ans['debug']['mess'].']';
+            if (isset($this->ans['debug']['message'])){
+                $this->ans['message'].=' '.'[DEBUG: '.$this->ans['debug']['message'].']';
             }
             // тут можно что угодно придумать
         }
