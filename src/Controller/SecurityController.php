@@ -60,7 +60,20 @@ class SecurityController extends AbstractController
         // Честно пытаемся установить перенабравление: 1) куда просили в ссылке 2) куда установлен дефолт 3) на главную
         if ($redirect_to_name!='') {
             try {
-                $redirect_to_path = $this->generateUrl($redirect_to_name);
+                $redirectName=$redirect_to_name;
+                $param = [];
+                if (str_contains($redirect_to_name, ';')){
+                    $redirectName = substr($redirect_to_name, 0, strpos($redirect_to_name, ";"));
+                    $paramsArr = explode(';', substr($redirect_to_name, strpos($redirect_to_name, ";")+1));
+
+                    foreach ($paramsArr as $str){
+                        if (str_contains($str, ':')){
+                            list($paramName, $paramValue) = explode(':', $str);
+                            $param[$paramName] = $paramValue;
+                        }
+                    }
+                }
+                $redirect_to_path = $this->generateUrl($redirectName, $param);
             } catch (RouteNotFoundException $e) {
                 $redirect_to_path = '/';
             }
